@@ -55,15 +55,13 @@ class _NoteItemState extends State<NoteItem> {
     return Column(
       children: [
         ListTile(
+          onTap: (){
+             Navigator.pushNamed(context, "/create-note",
+                  arguments: {"note": widget.note, "update": true});
+          },
           title: Text(widget.note.name),
           subtitle: Text(Utils.converterDate(widget.note.date)),
-          leading: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              Navigator.pushNamed(context, "/create-note",
-                  arguments: {"note": widget.note, "update": true});
-            },
-          ),
+
           trailing: IconButton(
             icon: Icon(Icons.delete_outline),
             onPressed: () {
