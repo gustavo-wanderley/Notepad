@@ -20,7 +20,6 @@ class _FormNoteViewState extends State<FormNoteView> {
   };
 
   _addNota(BuildContext context) {
-    
     Provider.of<NoteDao>(context, listen: false).insertNote(Note(
       name: editingControllerTitle.text,
       date: DateTime.now(),
@@ -88,7 +87,7 @@ class _FormNoteViewState extends State<FormNoteView> {
               Card(
                 elevation: 2,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -99,20 +98,15 @@ class _FormNoteViewState extends State<FormNoteView> {
                             border: InputBorder.none),
                         keyboardType: TextInputType.multiline,
                         maxLength: 10000,
+                        minLines: 10,
                         maxLines: null,
                         controller: editingControllerNote,
                       ),
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
                     Text(Utils.converterDate(DateTime.now())),
-                    SizedBox(
-                      height: 10,
-                    )
                   ],
                 ),
-              )
+              ),
             ],
           )),
         ),
