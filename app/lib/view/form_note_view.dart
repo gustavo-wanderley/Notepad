@@ -1,14 +1,18 @@
 import 'package:app/service/data_base.dart';
+import 'package:app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FormNoteView extends StatefulWidget {
+  final bool isEdit;
+  FormNoteView({this.isEdit});
   @override
   _FormNoteViewState createState() => _FormNoteViewState();
 }
 
 class _FormNoteViewState extends State<FormNoteView> {
-
+  TextEditingController editingControllerTitle = TextEditingController();
+  TextEditingController editingControllerNote = TextEditingController();
   Map<String, Object> _note = {
     "titulo": "",
     "data": null,
@@ -16,32 +20,48 @@ class _FormNoteViewState extends State<FormNoteView> {
   };
 
   _addNota(BuildContext context) {
+    
+    Provider.of<NoteDao>(context, listen: false).insertNote(Note(
+      name: editingControllerTitle.text,
+      date: DateTime.now(),
+      summary: editingControllerNote.text,
+    ));
+    Navigator.pop(context);
+  }
 
-    setState(() {
-      _note["data"] = DateTime.now();  
-    });
-    Provider.of<NoteDao>(context, listen: false).insertNote(
-      Note(
-        name: _note["titulo"] as String,
-        date: _note["data"],
-        summary: _note["nota"],
-      )
-    );
+  void _updateNote(BuildContext context, Note note) {
+    Provider.of<NoteDao>(context, listen: false).updateNote(note.copyWith(
+        name: editingControllerTitle.text,
+        summary: editingControllerNote.text));
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    var args = ModalRoute.of(context).settings.arguments as Map;
+    if (args != null) {
+      Note note = args["note"] as Note;
+      setState(() {
+        editingControllerTitle.text = note.name;
+        editingControllerNote.text = note.summary;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Bloco de Notas"),
         actions: [
-          IconButton(icon: Icon(Icons.share), onPressed: () {
-            
-          }),
-          IconButton(icon: Icon(Icons.check), onPressed: (){
-            _addNota(context);
-          })
+          IconButton(icon: Icon(Icons.share), onPressed: () {}),
+          IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () {
+                if (args == null) {
+                  _addNota(context);
+                } else {
+                  Note note = args["note"] as Note;
+                  _updateNote(context, note);
+                }
+              })
         ],
       ),
       body: Container(
@@ -53,17 +73,12 @@ class _FormNoteViewState extends State<FormNoteView> {
               Card(
                   elevation: 2,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 7),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 7),
                     child: TextField(
                       decoration: InputDecoration(
-                        labelText: "Título",
-                        border: InputBorder.none
-                      ),
-                      onChanged: (txt){
-                        setState(() {
-                          _note["titulo"] = txt;
-                        });
-                      },
+                          labelText: "Título", border: InputBorder.none),
+                      controller: editingControllerTitle,
                       maxLength: 30,
                     ),
                   )),
@@ -76,26 +91,25 @@ class _FormNoteViewState extends State<FormNoteView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 7),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 7),
                       child: TextField(
                         decoration: InputDecoration(
-                              labelText: "Sua anotação",
-                              border: InputBorder.none
-                            ),
+                            labelText: "Sua anotação",
+                            border: InputBorder.none),
                         keyboardType: TextInputType.multiline,
                         maxLength: 10000,
                         maxLines: null,
-                        onChanged: (txt){
-                        setState(() {
-                          _note["nota"] = txt;
-                        });
-                      },
+                        controller: editingControllerNote,
                       ),
                     ),
-                    SizedBox(height: 15,),
-
-                    Text("20/10/2021"),
-                    SizedBox(height: 10,)
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(Utils.converterDate(DateTime.now())),
+                    SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
               )

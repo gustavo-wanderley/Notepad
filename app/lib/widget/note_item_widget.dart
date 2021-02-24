@@ -1,37 +1,95 @@
-import 'dart:ffi';
-
 import 'package:app/service/data_base.dart';
+import 'package:app/service/local_shared.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../utils.dart';
 
 class NoteItemWidget extends StatelessWidget {
   final Note note;
   NoteItemWidget({this.note});
-
-  final DateFormat format = DateFormat('dd-MM-yyyy');
-
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: Key(note.id.toString()),
-      child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0), color: Colors.red),
-          margin: EdgeInsets.all(10),
-          child: ExpansionTile(
-            title: Text(note.name),
-            subtitle: Text("23 de fev de 2021"),
-            children: [
-              Text(
-                "Gustavo ROdrigues Wanderey Wanderley WanderleyGustavo ROdrigues Wanderey Wanderley Wanderley",
-                style: TextStyle(),
-                textAlign: TextAlign.justify,
-              ),
-              SizedBox(
-                height: 10,
-              )
-            ],
-          )),
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0), color: Color(0xffD7CCC8)),
+        margin: EdgeInsets.all(10),
+        child: NoteItem(note: note));
+  }
+}
+
+class NoteItem extends StatefulWidget {
+  const NoteItem({
+    Key key,
+    @required this.note,
+  }) : super(key: key);
+
+  final Note note;
+
+  @override
+  _NoteItemState createState() => _NoteItemState();
+}
+
+class _NoteItemState extends State<NoteItem> {
+  @override
+  Widget build(BuildContext context) {
+    _dialog() {
+      return AlertDialog(
+        content: Text("Apagar ${widget.note.name} ?"),
+        actions: [
+          FlatButton(
+              onPressed: () {
+                Provider.of<NoteDao>(context, listen: false)
+                    .deleteNote(widget.note);
+                Navigator.pop(context);
+              },
+              child: Text("Sim")),
+          FlatButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Não")),
+        ],
+      );
+    }
+
+    return Column(
+      children: [
+        ListTile(
+          title: Text(widget.note.name),
+          subtitle: Text(Utils.converterDate(widget.note.date)),
+          leading: IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.pushNamed(context, "/create-note",
+                  arguments: {"note": widget.note, "update": true});
+            },
+          ),
+          trailing: IconButton(
+            icon: Icon(Icons.delete_outline),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _dialog();
+                  });
+            },
+          ),
+        ),
+        if (Provider.of<LocalShared>(context).previa)
+          Container(
+            margin: EdgeInsets.only(bottom: 8, left: 14, right: 14),
+            child: widget.note.summary.length < 82 ? Text(
+              "${widget.note.summary}",
+              maxLines: 2,
+              textAlign: TextAlign.justify,
+              
+            ):Text(
+              Utils.resumeSummary(widget.note.summary),
+              maxLines: 2,
+              textAlign: TextAlign.justify,
+            ),
+          )
+      ],
     );
   }
 }

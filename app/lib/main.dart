@@ -1,6 +1,8 @@
 import 'package:app/service/data_base.dart';
+import 'package:app/service/local_shared.dart';
 import 'package:app/view/form_note_view.dart';
 import 'package:app/view/home_view.dart';
+import 'package:app/view/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,8 +13,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (_) => DataBase().noteDao,
+    return MultiProvider(
+      providers: [
+        Provider(create: (_) => DataBase().noteDao),
+        ChangeNotifierProvider(create: (_)=> LocalShared(),)
+      ],
       child: MaterialApp(
         title: 'Bloco de notas',
         debugShowCheckedModeBanner: false,
@@ -22,7 +27,8 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           "/": (context) => HomeView(),
-          "/create-note": (context) => FormNoteView()
+          "/create-note": (context) => FormNoteView(),
+          "/settings": (context) => SettingsView(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == "/create-note") {
