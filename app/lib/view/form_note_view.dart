@@ -103,7 +103,13 @@ class _FormNoteViewState extends State<FormNoteView> {
                         controller: editingControllerNote,
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(Utils.converterDate(DateTime.now())),
+                    SizedBox(
+                      height: 15,
+                    )
                   ],
                 ),
               ),
