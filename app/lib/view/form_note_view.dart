@@ -13,6 +13,7 @@ class FormNoteView extends StatefulWidget {
 class _FormNoteViewState extends State<FormNoteView> {
   TextEditingController editingControllerTitle = TextEditingController();
   TextEditingController editingControllerNote = TextEditingController();
+  // ignore: unused_field
   Map<String, Object> _note = {
     "titulo": "",
     "data": null,
@@ -20,6 +21,7 @@ class _FormNoteViewState extends State<FormNoteView> {
   };
 
   _addNota(BuildContext context) {
+    // ignore: missing_required_param
     Provider.of<NoteDao>(context, listen: false).insertNote(Note(
       name: editingControllerTitle.text,
       date: DateTime.now(),

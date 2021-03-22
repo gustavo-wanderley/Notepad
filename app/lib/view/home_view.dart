@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
       body: Container(
         child: StreamBuilder(
           builder: (context, snapshot) {
-            final notes = snapshot.data ?? List();
+            final notes = snapshot.data ?? [];
             if (notes.length == 0) {
               return Center(
                 child: Text("Não possui Notas"),

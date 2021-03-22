@@ -1,13 +1,25 @@
 import 'package:app/service/data_base.dart';
 import 'package:app/service/local_shared.dart';
+import 'package:app/shared/adsense_app.dart';
 import 'package:app/view/form_note_view.dart';
 import 'package:app/view/home_view.dart';
 import 'package:app/view/settings_view.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final initFuture = MobileAds.instance.initialize();
+  final _adsApp = AdsApp(initFuture);
+  runApp(
+    Provider.value(
+      value: _adsApp,
+      builder: (context, child) {
+        return MyApp();
+      },
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +28,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(create: (_) => DataBase().noteDao),
-        ChangeNotifierProvider(create: (_)=> LocalShared(),)
+        ChangeNotifierProvider(
+          create: (_) => LocalShared(),
+        )
       ],
       child: MaterialApp(
         title: 'Bloco de notas',

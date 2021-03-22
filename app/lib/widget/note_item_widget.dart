@@ -36,6 +36,7 @@ class _NoteItemState extends State<NoteItem> {
       return AlertDialog(
         content: Text("Apagar ${widget.note.name} ?"),
         actions: [
+          // ignore: deprecated_member_use
           FlatButton(
               onPressed: () {
                 Provider.of<NoteDao>(context, listen: false)
@@ -43,6 +44,7 @@ class _NoteItemState extends State<NoteItem> {
                 Navigator.pop(context);
               },
               child: Text("Sim")),
+          // ignore: deprecated_member_use
           FlatButton(
               onPressed: () {
                 Navigator.pop(context);
