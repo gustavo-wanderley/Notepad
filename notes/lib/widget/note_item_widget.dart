@@ -1,6 +1,6 @@
-import 'package:app/service/data_base.dart';
-import 'package:app/service/local_shared.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/service/data_base.dart';
+import 'package:notes/service/local_shared.dart';
 import 'package:provider/provider.dart';
 import '../utils.dart';
 
@@ -12,7 +12,7 @@ class NoteItemWidget extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0), color: Color(0xffD7CCC8)),
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.all(6),
         child: NoteItem(note: note));
   }
 }

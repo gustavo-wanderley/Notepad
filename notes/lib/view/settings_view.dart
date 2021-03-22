@@ -1,5 +1,5 @@
-import 'package:app/service/local_shared.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/service/local_shared.dart';
 import 'package:provider/provider.dart';
 
 class SettingsView extends StatefulWidget {

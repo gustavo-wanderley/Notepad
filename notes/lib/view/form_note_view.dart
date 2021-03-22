@@ -1,7 +1,7 @@
-import 'package:app/service/data_base.dart';
-import 'package:app/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/service/data_base.dart';
 import 'package:provider/provider.dart';
+import '../utils.dart';
 
 class FormNoteView extends StatefulWidget {
   final bool isEdit;
@@ -19,8 +19,15 @@ class _FormNoteViewState extends State<FormNoteView> {
     "data": null,
     "nota": "",
   };
+  String errorTitle;
 
   _addNota(BuildContext context) {
+    if (editingControllerTitle.text.isEmpty) {
+      setState(() {
+        errorTitle = "Título não pode ser vazio";
+      });
+      return;
+    }
     // ignore: missing_required_param
     Provider.of<NoteDao>(context, listen: false).insertNote(Note(
       name: editingControllerTitle.text,
@@ -52,7 +59,7 @@ class _FormNoteViewState extends State<FormNoteView> {
       appBar: AppBar(
         title: Text("Bloco de Notas"),
         actions: [
-          IconButton(icon: Icon(Icons.share), onPressed: () {}),
+          //IconButton(icon: Icon(Icons.share), onPressed: () {}),
           IconButton(
               icon: Icon(Icons.check),
               onPressed: () {
@@ -78,7 +85,9 @@ class _FormNoteViewState extends State<FormNoteView> {
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 7),
                     child: TextField(
                       decoration: InputDecoration(
-                          labelText: "Título", border: InputBorder.none),
+                          errorText: errorTitle == null ? null : errorTitle,
+                          labelText: "Título",
+                          border: InputBorder.none),
                       controller: editingControllerTitle,
                       maxLength: 30,
                     ),
@@ -96,6 +105,7 @@ class _FormNoteViewState extends State<FormNoteView> {
                           vertical: 0, horizontal: 7),
                       child: TextField(
                         decoration: InputDecoration(
+                            labelStyle: TextStyle(),
                             labelText: "Sua anotação",
                             border: InputBorder.none),
                         keyboardType: TextInputType.multiline,
