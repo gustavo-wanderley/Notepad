@@ -18,10 +18,10 @@
 
 Tela Inicial            |  Tela Adicionar Nota
 :-------------------------:|:-------------------------:|
-<image src="app\flutter_01.png"></image>  |  <image src="app\flutter_02.png"></image>
+<image src="notes/screenshots/flutter_01.png"></image>  |  <image src="notes/screenshots/flutter_02.png"></image>
 
 
 Tela Inicial com Notas            |  Tela de Configuraçẽs
 :-------------------------:|:-------------------------:|
-<image src="app\flutter_03.png"></image>  |  <image src="app\flutter_04.png"></image>
+<image src="notes/screenshots/flutter_04.png"></image>  |  <image src="notes/screenshots/flutter_03.png"></image>
 
